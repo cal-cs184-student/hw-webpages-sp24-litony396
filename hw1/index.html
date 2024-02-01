@@ -2,6 +2,15 @@
 	<head>
 	</head>
 	<body>
-		Homework 1 index.html here
+		<section>
+			<h2>Task 1: Drawing Single-Color Triangles</h2>
+			To rasterize triangles, I calculate A, B, and C of the line equation (L(x,y) = Ax + By + C) of the three lines of the triangle (P0->P1, P1->P2, P2->P0).
+			Then, I evaluate these three line equations for each point in the bounding box of the triangle, filling the pixel if all of the line equations are >= 0 or <= 0.
+			I check that they're either >= 0 or <= 0 in order to make winding order irrelevant because going a different direction just flips the sign. This doesn't fill additional pixels because the line equations only satisfy this condition when the point is inside the triangle.
+
+			This algorithm is no worse than one that checks each sample in the bounding box of the triangle since it just checks each sample in the bounding box.
+
+			
+		</section>
 	</body>
 </html>
