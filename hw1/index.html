@@ -7,9 +7,22 @@
 			To rasterize triangles, I calculate A, B, and C of the line equation (L(x,y) = Ax + By + C) of the three lines of the triangle (P0->P1, P1->P2, P2->P0).
 			Then, I evaluate these three line equations for each point in the bounding box of the triangle, filling the pixel if all of the line equations are >= 0 or <= 0.
 			I check that they're either >= 0 or <= 0 in order to make winding order irrelevant because going a different direction just flips the sign. This doesn't fill additional pixels because the line equations only satisfy this condition when the point is inside the triangle.
+			<br>
+			This algorithm is no worse than one that checks each sample in the bounding box of the triangle since it just calculates the bounding box and then tests each sample in the bounding box.
 
-			This algorithm is no worse than one that checks each sample in the bounding box of the triangle since it just checks each sample in the bounding box.
+			
+		</section>
 
+		<section>
+			<h2> Task 2: Antialiasing by Supersampling</h2>
+			My supersampling algorithm just uses the sample buffer. The sample buffer is made to be (sample_rate) times larger than the frame buffer: (width * height * sample_rate).
+			My algorithm samples normally at a higher resolution image and then downsamples the high-res image to the correct size. 
+			I modified the 3rd step of the rasterization pipeline since I had to make it write to the correct pixels on the enlarged sample buffer in fill_pixel() and rasterize_triangle(). 
+			I also modified the 5th step of the pipeline by changing resolve_to_framebuffer(). I changed it by adding in a section which downsamples the sample_buffer and places the resulting pixel color in the correct place.
+			I downsample by averaging the pixels inside of the section which corresponds to a particular pixel in the frame buffer.
+			<br>
+			I used supersampling to antialias the triangles by first changing rasterize_triangle() to multiply the coordinates of the triangle by sqrt(sample_rate). This upscales the triangle to be placed in the correct area of the sample_buffer.
+			Then, I just kept the same algorithm as part 1 except I had to change the indexing to place the pixel by making it place it at (y * width * sqrt(sample_rate) + x) rather than just (y * width + x) to reflect the change in the sample_buffer's size.
 			
 		</section>
 	</body>
